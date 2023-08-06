@@ -17,3 +17,8 @@ Step-by-step guided learning
 Build on what you have learned
 
 -> Rename index.html to waves.html
+
+<h3 align="left">Connect with me:</h3>
+<p align="left">
+<a href="https://linkedin.com/in/jp-93b92096" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="jp-93b92096" height="30" width="40" /></a>
+</p>
