@@ -14,7 +14,7 @@ Step-by-step guided learning
 
 # DYI
 
-Build on what you have learned
+Build on what you have learned.
 
 -> Rename index.html to waves.html
 
