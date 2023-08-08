@@ -1,0 +1,13 @@
+#!/bin/bash
+sudo yum update -y
+sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm -y
+sudo yum install mysql-community-server --nogpgcheck -y
+sudo systemctl enable --now mysqld
+
+
+PASS=`sudo grep 'temporary password' /var/log/mysqld.log |rev |cut -d ' ' -f 1 |rev`
+NEWPASS="Craz1Passw0rd#"
+
+echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASS';" | mysql -u root -p$PASS --connect-expired-password
+echo "create user 'ec2'@'%' identified by '$NEWPASS';" | mysql -u root -p$NEWPASS
+echo "GRANT ALL PRIVILEGES ON *.* TO 'ec2'@'%' WITH GRANT OPTION;" | mysql -u root -p$NEWPASS
