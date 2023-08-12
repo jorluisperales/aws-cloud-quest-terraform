@@ -37,34 +37,38 @@ resource "aws_internet_gateway" "fin_igw" {
   }
 }
 
-resource "aws_route_table" "fin2mar_rt" {
+resource "aws_route_table" "fin2mardev_rt" {
   vpc_id = aws_vpc.finance_vcp.id
   route {
     cidr_block                = "10.10.0.0/16"
     vpc_peering_connection_id = aws_vpc_peering_connection.mar_fin.id
   }
+  route {
+    cidr_block                = "192.168.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.dev_fin.id
+  }
   tags = {
-    Name = "Finance 2 Marketing route"
+    Name = "Finance 2 Marketing & Developer route"
   }
 }
 
-resource "aws_route_table_association" "fin2mar_rta" {
-  subnet_id      = aws_subnet.finance_private_subnets["172.31.1.0/24"].id
-  route_table_id = aws_route_table.fin2mar_rt.id
+resource "aws_route_table_association" "fin2mardev_rta" {
+  subnet_id      = aws_subnet.finance_private_subnets["172.31.0.0/24"].id
+  route_table_id = aws_route_table.fin2mardev_rt.id
 
 }
 
 resource "aws_security_group" "fin_sg" {
-  name        = "Marketin_SG"
-  description = "Allowing ICMP from Marketing "
+  name        = "From_Mar_Dev_SG"
+  description = "Allowing ICMP from Marketing and Developer "
   vpc_id      = aws_vpc.finance_vcp.id
 
   ingress {
-    description = "Allowing ICMP from Marketing"
+    description = "Allowing ICMP from Marketing and Developer"
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
-    cidr_blocks = ["10.10.0.0/16"]
+    cidr_blocks = ["10.10.0.0/16", "192.168.0.0/24"]
   }
 
   egress {
@@ -125,7 +129,7 @@ resource "aws_route_table" "mar2fin_rt" {
 }
 
 resource "aws_route_table_association" "mar2fin_rta" {
-  subnet_id      = aws_subnet.marketing_public_subnets["10.10.1.0/24"].id
+  subnet_id      = aws_subnet.marketing_public_subnets["10.10.0.0/24"].id
   route_table_id = aws_route_table.mar2fin_rt.id
 
 }
@@ -176,6 +180,7 @@ resource "aws_subnet" "developer_public_subnets" {
   }
 
 }
+
 resource "aws_internet_gateway" "dev_igw" {
   vpc_id = aws_vpc.developer_vcp.id
 
@@ -183,6 +188,54 @@ resource "aws_internet_gateway" "dev_igw" {
     Name = var.all_tags.dev_igw_name
   }
 }
+
+resource "aws_route_table" "dev2fin_rt" {
+  vpc_id = aws_vpc.developer_vcp.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.dev_igw.id
+  }
+  route {
+    cidr_block                = "172.31.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.dev_fin.id
+  }
+  tags = {
+    Name = "Developer 2 Finance route"
+  }
+}
+
+resource "aws_route_table_association" "dev2fin_rta" {
+  subnet_id      = aws_subnet.developer_public_subnets["192.168.0.0/24"].id
+  route_table_id = aws_route_table.dev2fin_rt.id
+
+}
+
+resource "aws_security_group" "dev_sg" {
+  name        = "DeveloperServerSecurityGroup"
+  description = "Security Group for Developer Server"
+  vpc_id      = aws_vpc.developer_vcp.id
+
+  ingress {
+    description = "Allowing ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "DeveloperServerSecurityGroup"
+  }
+
+}
+
 ### VPC Peering ###
 resource "aws_vpc_peering_connection" "mar_fin" {
   peer_vpc_id = aws_vpc.finance_vcp.id
@@ -194,4 +247,12 @@ resource "aws_vpc_peering_connection" "mar_fin" {
   }
 }
 
+resource "aws_vpc_peering_connection" "dev_fin" {
+  peer_vpc_id = aws_vpc.finance_vcp.id
+  vpc_id      = aws_vpc.developer_vcp.id
+  auto_accept = true
 
+  tags = {
+    Name = var.all_tags.peering_dev_fin_name
+  }
+}

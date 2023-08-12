@@ -45,4 +45,3 @@ variable "all_tags" {
   type        = map(string)
 
 }
-

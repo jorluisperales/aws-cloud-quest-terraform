@@ -37,6 +37,7 @@ pub_developer_subnets = {
 
 all_tags = {
   "peering_mar_fin_name" = "Marketing <> Finance"
+  "peering_dev_fin_name" = "Developer <> Finance"
   "mar_igw_name"         = "connecting-vpc/Marketing VPC"
   "dev_igw_name"         = "connecting-vpc/Developer VPC"
   "fin_igw_name"         = "connecting-vpc/Finance VPC"
