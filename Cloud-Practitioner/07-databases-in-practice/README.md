@@ -22,6 +22,7 @@ Build on what you have learned
 Important details:
 
 -> DB instance class is set to db.t2.micro to remain within AWS's free tier. The actual practice asks for a db.t3.xlarge.
+-> In order to deploy the DB and replica using the free instance, I had to set the value `storage_encrypted` to `false`, the practice uses `db.t3.xlarge` which is not free and takes longer to be provisioned/deleted.
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
