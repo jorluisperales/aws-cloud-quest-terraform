@@ -10,10 +10,6 @@ Theses codes are for testing in your own aws cloud.
 
 Feel free to fork and star this repo and help improving the codes
 
-Important:
-
--> In order to deploy the DB and replica using the free instance, I had to set the value `storage_encrypted` to `false`, the practice uses `db.t3.xlar` which is not free and takes longer to be provisioned/deleted.
-
 <h3 align="left">Connect with me:</h3>
 <p align="left">
 <a href="https://www.linkedin.com/in/jorluis-perales-93b92096/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="jp-93b92096" height="30" width="40" /></a>
