@@ -35,6 +35,7 @@ resource "aws_db_instance" "my_database" {
   storage_encrypted          = false # This I disable in order to use db.t2.micro
   auto_minor_version_upgrade = false
 
+  skip_final_snapshot = true
 }
 
 
