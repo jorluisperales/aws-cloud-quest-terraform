@@ -19,7 +19,7 @@ Build on what you have learned
 
 Important details:
 
-- -> Terraform does not support setting plain text passwords for IAM users, I have configured the code so a random password is created..
+- -> Terraform does not support setting plain text based passwords for IAM users, I have configured the code so a random password is created.
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
